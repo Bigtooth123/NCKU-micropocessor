@@ -1,0 +1,66 @@
+List p=18f4520
+    #include<p18f4520.inc>
+        CONFIG OSC = INTIO67
+        CONFIG WDT = OFF
+        org 0x00
+	
+	MOVLW 0x01
+	MOVFF WREG, 0x100  ;[0x100] == 0x00
+	
+	MOVLW 0x00
+	MOVFF WREG, 0x116  ;[0x116] == 0x01
+	
+	LFSR 0, 0x100 ; FSR0 point to [0x100]
+	ADDWF INDF0, W  ;W = W + FSR0  (W==[0x116]==0x01)
+	MOVFF WREG, 0x101  ;[0x101] == 0x01
+	
+	LFSR 0, 0x116 ; FSR0 point to [0x116]
+	ADDWF INDF0, W  ;W = W + FSR0  (W==[0x101]==0x01)
+	MOVFF WREG, 0x115  ;[0x115] == 0x02
+	
+	LFSR 0, 0x101 ; FSR0 point to [0x101]
+	ADDWF INDF0, W  ;W = W + FSR0  (W==[0x115]==0x02)
+	MOVFF WREG, 0x102  ;[0x102] == 0x03
+	
+	LFSR 0, 0x115 ; FSR0 point to [0x115]
+	ADDWF INDF0, W  ;W = W + FSR0  (W==[0x102]==0x03)
+	MOVFF WREG, 0x114  ;[0x114] == 0x05
+	
+	LFSR 0, 0x102 ; FSR0 point to [0x102]
+	ADDWF INDF0, W  ;W = W + FSR0  (W==[0x114]==0x05)
+	MOVFF WREG, 0x103  ;[0x103] == 0x08
+	
+	LFSR 0, 0x114 ; FSR0 point to [0x114]
+	ADDWF INDF0, W  ;W = W + FSR0  (W==[0x103]==0x08)
+	MOVFF WREG, 0x113  ;[0x103] == 0x0D (13)
+	
+	LFSR 0, 0x103
+	ADDWF INDF0, W
+	MOVFF WREG, 0x104
+	
+	LFSR 0, 0x113
+	ADDWF INDF0, W
+	MOVFF WREG, 0x112
+	
+	LFSR 0, 0x104
+	ADDWF INDF0, W
+	MOVFF WREG, 0x105
+	
+	LFSR 0, 0x112
+	ADDWF INDF0, W
+	MOVFF WREG, 0x111
+	
+	LFSR 0, 0x105
+	ADDWF INDF0, W
+	MOVFF WREG, 0x106
+	
+	LFSR 0, 0x111
+	ADDWF INDF0, W
+	MOVFF WREG, 0x110
+	
+	
+	
+	end
+	    
+
+

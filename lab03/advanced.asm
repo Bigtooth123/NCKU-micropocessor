@@ -1,0 +1,78 @@
+List p=18f4520
+    #include<p18f4520.inc>
+        CONFIG OSC = INTIO67
+        CONFIG WDT = OFF
+        org 0x00
+	
+	MOVLW 0x77
+	MOVFF WREG, 0x00
+	MOVLW 0x77
+	MOVFF WREG, 0x01  ;first number
+	
+	MOVLW 0x56
+	MOVFF WREG, 0x10
+	MOVLW 0x78
+	MOVFF WREG, 0x11  ;second number
+	
+	MOVLW 0x00
+	MOVWF 0x20
+	MOVWF 0x21
+	MOVWF 0x22
+	MOVWF 0x23  ;clear these memory
+	
+	
+	MOVFF 0x11, WREG
+	MULWF 0x01  ;[0x11]*[0x01]
+	MOVFF PRODL, WREG
+	ADDWF 0x23, f   ;[0x23] = [0x23] + PRODL
+	MOVFF PRODH, WREG
+	ADDWF 0x22, f   ;[0x22] = [0x22] + PRODH
+	
+	
+	MOVFF 0x11, WREG
+	MULWF 0x00  ;[0x11]*[0x00]
+	MOVFF PRODL, WREG
+	ADDWF 0x22, f   ;[0x22] = [0x22] + PRODL
+	MOVFF STATUS, 0x09   ;check carry
+	MOVLW 0x00
+	BTFSC 0x09, 0
+	MOVLW 0x01  ;carry = 1
+	ADDWF 0x21, f  ;[0x21] = [0x21] + W  add carry
+	MOVFF PRODH, WREG
+	ADDWF 0x21, f   ;[0x21] = [0x21] + PRODH
+	MOVFF STATUS, 0x09   ;check carry
+	MOVLW 0x00
+	BTFSC 0x09, 0
+	MOVLW 0x01  ;carry = 1
+	ADDWF 0x20, f  ;[0x20] = [0x20] + W  add carry
+	
+	MOVFF 0x10, WREG
+	MULWF 0x01  ;[0x10]*[0x01]
+	MOVFF PRODL, WREG
+	ADDWF 0x22, f   ;[0x22] = [0x22] + PRODL
+	MOVFF STATUS, 0x09   ;check carry
+	MOVLW 0x00
+	BTFSC 0x09, 0
+	MOVLW 0x01  ;carry = 1
+	ADDWF 0x21, f  ;[0x21] = [0x21] + W   add carry
+	MOVFF PRODH, WREG
+	ADDWF 0x21, f   ;[0x21] = [0x21] + PRODH
+	MOVFF STATUS, 0x09   ;check carry
+	MOVLW 0x00
+	BTFSC 0x09, 0
+	MOVLW 0x01  ;carry = 1
+	ADDWF 0x20, f  ;[0x20] = [0x20] + W   add carry
+	
+	MOVFF 0x10, WREG
+	MULWF 0x00  ;[0x10]*[0x00]
+	MOVFF PRODL, WREG
+	ADDWF 0x21, f   ;[0x21] = [0x21] + PRODL
+	MOVFF STATUS, 0x09   ;check carry
+	MOVLW 0x00
+	BTFSC 0x09, 0
+	MOVLW 0x01  ;carry = 1
+	ADDWF 0x20, f  ;[0x20] = [0x20] + W   add carry
+	MOVFF PRODH, WREG
+	ADDWF 0x20, f   ;[0x20] = [0x20] + PRODH
+	
+	end
